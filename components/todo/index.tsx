@@ -1,1 +1,2 @@
-export * from './todo';
+export { Todo } from './todo';
+export type { TodoProps } from './todo';
