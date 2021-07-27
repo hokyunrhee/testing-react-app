@@ -3,25 +3,26 @@ import { mount } from '@cypress/react';
 import { TodoList } from './todo-list';
 
 describe('TodoList Component', () => {
-  const todos = [
-    { id: 1, title: '돈코츠 라멘 주문하기', isDone: false },
-    { id: 2, title: '교자 주문하기', isDone: false },
-    { id: 3, title: '생맥주 주문하기', isDone: false },
-  ];
+  beforeEach(function () {
+    cy.fixture('todos.json').as('todos');
 
-  it('contains correct number of todos', () => {
-    mount(<TodoList todos={todos} />);
-
-    cy.get('[data-cy=todo-list]').children().should('have.length', todos.length);
+    this.deleteTodo = cy.stub();
+    this.addTodo = cy.stub();
   });
 
-  it('contains correct titles', () => {
-    mount(<TodoList todos={todos} />);
+  it('contains correct number of todos', function () {
+    mount(<TodoList todos={this.todos} addTodo={this.addTodo} deleteTodo={this.deleteTodo} />);
+
+    cy.get('[data-cy=todo-list]').children().should('have.length', this.todos.length);
+  });
+
+  it('renders "완료" button', function () {
+    mount(<TodoList todos={this.todos} addTodo={this.addTodo} deleteTodo={this.deleteTodo} />);
 
     cy.get('[data-cy=todo-list]')
       .children()
-      .each(($el, index) => {
-        cy.wrap($el).should('contain.text', todos[index].title);
+      .each(($el) => {
+        cy.wrap($el).find('button').should('contain.text', '완료');
       });
   });
 });

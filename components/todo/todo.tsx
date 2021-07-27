@@ -1,18 +1,20 @@
 import React from 'react';
 
-export interface TodoProps {
+type TodoType = {
   id: number;
   title: string;
-  isDone: boolean;
+};
+
+export interface TodoProps {
+  todo: TodoType;
+  deleteTodo: (id: number) => void;
 }
 
-export const Todo = ({ title, isDone }: TodoProps) => {
-  const className = isDone ? 'done' : '';
-  const style = isDone ? { color: 'lightgray', textDecoration: 'line-through' } : undefined;
-
+export const Todo = ({ todo, deleteTodo }: TodoProps) => {
   return (
-    <li className={className} style={style} data-cy="todo">
-      {title}
+    <li data-cy="todo">
+      <span>{todo.title}</span>
+      <button onClick={() => deleteTodo(todo.id)}>완료</button>
     </li>
   );
 };
